@@ -17,12 +17,6 @@ RUN apt-get -y install  software-properties-common python-software-properties
 # Nginx
 RUN sudo add-apt-repository ppa:nginx/stable
 
-# php
-RUN export LANG=C.UTF-8 && sudo add-apt-repository ppa:ondrej/php
-
-
-RUN apt-get -y update
-
 RUN sudo apt-get -y install  pwgen python-setuptools curl git unzip vim \
             openssl git git-core htop rsyslog zip vim-common multitail sysvbanner figlet python-pip zsh wget telnet libpcre3 libpcre3-dev ssh
 
@@ -97,7 +91,6 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN rm  /root/.zshrc
 ADD ./files/zshrc /root/.zshrc
 ADD ./files/zshrc /home/ubuntu/.zshrc
 
@@ -105,6 +98,11 @@ RUN chsh -s `which zsh` ubuntu
 RUN chsh -s `which zsh`
 
 RUN chmod -R 755 /usr/local/share/zsh/site-functions
+
+# php
+RUN apt-get update
+RUN export LANG=C.UTF-8 && sudo add-apt-repository ppa:ondrej/php
+RUN apt-get -y update
 
 RUN apt-get -y install \
         php7.1-fpm   \
